@@ -1,0 +1,3 @@
+[submodule "CDAC-OS"]
+	path = CDAC-OS
+	url = https://github.com/elpidaguy/CDAC-OS.git
