@@ -267,7 +267,7 @@
 
 /* Private defines -----------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-#define APP_START_ADDRESS 0x08010000UL
+#define APP_START_ADDRESS 0x08008000UL
 /* USER CODE END PD */
 
 /* Private variables ---------------------------------------------------------*/
@@ -284,18 +284,8 @@ static void MX_USART2_UART_Init(void);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-  /*
-   * CRITICAL — must be the very first thing before HAL_Init().
-   *
-   * The bootloader runs from 0x08000000 and has its own vector table there.
-   * After jumping here, the hardware VTOR still points to 0x08000000.
-   * Any interrupt (SysTick, UART, etc.) that fires before we relocate VTOR
-   * will execute the BOOTLOADER's handler, not ours — causing a crash.
-   *
-   * Setting VTOR here redirects all vectors to this application's table
-   * which is placed at 0x08010000 by the linker (.isr_vector section).
-   */
-  SCB->VTOR = APP_START_ADDRESS;
+	SCB->VTOR = APP_START_ADDRESS;   // point at the app's vector table, e.g. 0x08008000
+;
   __DSB(); // Ensure the write completes before any interrupt can fire
   __enable_irq();
   /* USER CODE END 1 */
@@ -310,7 +300,7 @@ int main(void)
   {
     HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
     HAL_UART_Transmit(&huart2, (uint8_t*)"APPLICATION\r\n", 13, HAL_MAX_DELAY);
-    HAL_Delay(100); // 100ms blink
+    HAL_Delay(5000);
   }
 }
 
